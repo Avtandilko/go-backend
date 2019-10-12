@@ -9,12 +9,6 @@ import (
 	"net/http"
 )
 
-// Global represents a ...
-type Global struct {
-	Students []Student
-	Courses  []Course
-}
-
 // Student represents a ...
 type Student struct {
 	ID         int    `json:"id"`
@@ -31,19 +25,13 @@ type Course struct {
 
 // HomeRouterHandler represents a ...
 func HomeRouterHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello World!")
-	r.ParseForm()
-	log.Println("path", r.URL.Path)
+	fmt.Fprintln(w, http.StatusOK)
+	log.Printf("%v GET '%s'\n", http.StatusOK, r.URL.Path)
 }
 
 // APIRouterHandler represents a ...
 func APIRouterHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "ok")
-}
-
-// GlobalRouterHandler represents a ...
-func GlobalRouterHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, string(1))
 }
 
 // StudentsRouterHandler represents a ...
@@ -127,9 +115,8 @@ func getCourses() []byte {
 func main() {
 	http.HandleFunc("/", HomeRouterHandler)
 	http.HandleFunc("/api/healthz", APIRouterHandler)
-	http.HandleFunc("/students", StudentsRouterHandler)
-	http.HandleFunc("/courses", CoursesRouterHandler)
-	http.HandleFunc("/global", GlobalRouterHandler)
+	http.HandleFunc("/api/students", StudentsRouterHandler)
+	http.HandleFunc("/api/courses", CoursesRouterHandler)
 	err := http.ListenAndServe(":80", nil)
 
 	if err != nil {
