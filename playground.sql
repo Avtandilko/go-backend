@@ -6,8 +6,8 @@ CREATE TABLE IF NOT EXISTS students(
 );
 
 CREATE TABLE IF NOT EXISTS courses(
-   ID serial PRIMARY KEY,
-   Title VARCHAR (50) NOT NULL
+   id serial PRIMARY KEY,
+   title VARCHAR (50) NOT NULL
 );
 
 INSERT INTO students (firstName, secondName, email) VALUES ('student', 'one', 'student_one@gmail.com');

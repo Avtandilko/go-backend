@@ -53,7 +53,7 @@ func StudentsRouterHandler(w http.ResponseWriter, r *http.Request) {
 
 // CoursesRouterHandler represents a ...
 func CoursesRouterHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, string(3))
+	fmt.Fprintln(w, string(getCourses()))
 }
 
 func getStudents() []byte {
@@ -83,6 +83,40 @@ func getStudents() []byte {
 	}
 
 	response, err := json.Marshal(students)
+	if err != nil {
+		log.Fatal("json.Marshal: ", err)
+	}
+
+	return response
+}
+
+func getCourses() []byte {
+	connStr := "host=localhost user=postgres password=postgres dbname=playground sslmode=disable"
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM courses;")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	courses := []Course{}
+
+	for rows.Next() {
+		c := Course{}
+		err := rows.Scan(&c.ID, &c.Title)
+		if err != nil {
+			log.Fatal("rows.Scan: ", err)
+		}
+		courses = append(courses, c)
+	}
+
+	response, err := json.Marshal(courses)
 	if err != nil {
 		log.Fatal("json.Marshal: ", err)
 	}
