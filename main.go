@@ -25,7 +25,7 @@ type Student struct {
 
 // Course represents a ...
 type Course struct {
-	ID    int `json:"id"`
+	ID    int    `json:"id"`
 	Title string `json:"title"`
 }
 
