@@ -1,77 +1,32 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
+	_ "github.com/lib/pq"
 	"log"
 	"net/http"
 )
 
 // Global represents a ...
 type Global struct {
-	Students []Students
-	Courses  []Courses
+	Students []Student
+	Courses  []Course
 }
 
-// Students represents a ...
-type Students struct {
-	Name, Surname string
+// Student represents a ...
+type Student struct {
+	ID         int    `json:"id"`
+	FirstName  string `json:"firstName"`
+	SecondName string `json:"secondName"`
+	Email      string `json:"email"`
 }
 
-// Courses represents a ...
-type Courses struct {
-	Name string
-	ID   int
-}
-
-var studentsOne = Students{
-	Name:    "Student",
-	Surname: "One",
-}
-
-var studentsTwo = Students{
-	Name:    "Student",
-	Surname: "Two",
-}
-
-var coursesGo = Courses{
-	Name: "Go",
-	ID:   1,
-}
-
-var global = Global{
-	Students: []Students{studentsOne, studentsTwo},
-	Courses:  []Courses{coursesGo},
-}
-
-func getGlobal() []byte {
-
-	response, err := json.Marshal(global)
-	if err != nil {
-		fmt.Println("Error:", err)
-	}
-
-	return response
-}
-
-func getStudents() []byte {
-
-	response, err := json.Marshal([]Students{studentsOne, studentsTwo})
-	if err != nil {
-		fmt.Println("Error:", err)
-	}
-
-	return response
-}
-
-func getCourses() []byte {
-
-	response, err := json.Marshal([]Courses{coursesGo})
-	if err != nil {
-		fmt.Println("Error:", err)
-	}
-
-	return response
+// Course represents a ...
+type Course struct {
+	ID    int `json:"id"`
+	Title string `json:"title"`
 }
 
 // HomeRouterHandler represents a ...
@@ -88,7 +43,7 @@ func APIRouterHandler(w http.ResponseWriter, r *http.Request) {
 
 // GlobalRouterHandler represents a ...
 func GlobalRouterHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, string(getGlobal()))
+	fmt.Fprintln(w, string(1))
 }
 
 // StudentsRouterHandler represents a ...
@@ -98,11 +53,44 @@ func StudentsRouterHandler(w http.ResponseWriter, r *http.Request) {
 
 // CoursesRouterHandler represents a ...
 func CoursesRouterHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, string(getCourses()))
+	fmt.Fprintln(w, string(3))
+}
+
+func getStudents() []byte {
+	connStr := "host=localhost user=postgres password=postgres dbname=playground sslmode=disable"
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM students;")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	students := []Student{}
+
+	for rows.Next() {
+		s := Student{}
+		err := rows.Scan(&s.ID, &s.FirstName, &s.SecondName, &s.Email)
+		if err != nil {
+			log.Fatal("rows.Scan: ", err)
+		}
+		students = append(students, s)
+	}
+
+	response, err := json.Marshal(students)
+	if err != nil {
+		log.Fatal("json.Marshal: ", err)
+	}
+
+	return response
 }
 
 func main() {
-
 	http.HandleFunc("/", HomeRouterHandler)
 	http.HandleFunc("/api/healthz", APIRouterHandler)
 	http.HandleFunc("/students", StudentsRouterHandler)
