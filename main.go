@@ -19,10 +19,10 @@ import (
 // Student represents a ...
 // swagger:response StudentResponse
 type Student struct {
-	ID         string    `json:"id"`
-	Firstname  string `json:"firstname"`
-	Lastname   string `json:"secondname"`
-	Email      string `json:"email"`
+	ID        string `json:"id"`
+	Firstname string `json:"firstname"`
+	Lastname  string `json:"secondname"`
+	Email     string `json:"email"`
 }
 
 // swagger:route GET /api/v2/courses courses idOfCoursesEndpoint
@@ -32,7 +32,7 @@ type Student struct {
 // Course represents a ...
 // swagger:response CourseResponse
 type Course struct {
-	ID    string    `json:"id"`
+	ID    string `json:"id"`
 	Title string `json:"title"`
 }
 
@@ -50,40 +50,39 @@ func APIRouterHealthHandler(w http.ResponseWriter, r *http.Request) {
 // getStudents represents a ...
 func getStudents(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-    json.NewEncoder(w).Encode(readStudents())
+	json.NewEncoder(w).Encode(readStudents())
 }
 
 // getStudent represents a ...
 func getStudent(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "application/json")
-    params := mux.Vars(r)
-    for _, item := range readStudents() {
-       if item.ID == params["id"] {
-          json.NewEncoder(w).Encode(item)
-          return
-        }
-    }
-   json.NewEncoder(w).Encode(&Student{})
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	for _, item := range readStudents() {
+		if item.ID == params["id"] {
+			json.NewEncoder(w).Encode(item)
+			return
+		}
+	}
+	json.NewEncoder(w).Encode(&Student{})
 }
 
 // getCourse represents a ...
 func getCourse(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "application/json")
-    params := mux.Vars(r)
-    for _, item := range readCourses() {
-       if item.ID == params["id"] {
-          json.NewEncoder(w).Encode(item)
-          return
-        }
-    }
-   json.NewEncoder(w).Encode(&Course{})
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	for _, item := range readCourses() {
+		if item.ID == params["id"] {
+			json.NewEncoder(w).Encode(item)
+			return
+		}
+	}
+	json.NewEncoder(w).Encode(&Course{})
 }
-
 
 // getCourses represents a ...
 func getCourses(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-    json.NewEncoder(w).Encode(readCourses())
+	json.NewEncoder(w).Encode(readCourses())
 }
 
 func init() {
@@ -167,11 +166,11 @@ func main() {
 	http.Handle("/", r)
 
 	srv := &http.Server{
-        Handler:      r,
-        Addr:         ":80",
-        WriteTimeout: 15 * time.Second,
-        ReadTimeout:  15 * time.Second,
-    }
+		Handler:      r,
+		Addr:         ":80",
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
+	}
 
 	log.Fatal(srv.ListenAndServe())
 }
