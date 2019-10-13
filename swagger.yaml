@@ -1,4 +1,3 @@
-info: {}
 paths:
   /api/v2/courses:
     get:
@@ -7,7 +6,7 @@ paths:
         "200":
           $ref: '#/responses/CourseResponse'
       tags:
-      - students-tag
+      - courses
   /api/v2/students:
     get:
       operationId: idOfStudentsEndpoint
@@ -15,7 +14,7 @@ paths:
         "200":
           $ref: '#/responses/StudentResponse'
       tags:
-      - students-tag
+      - students
 responses:
   CourseResponse:
     description: Course represents a ...
@@ -30,11 +29,11 @@ responses:
     headers:
       email:
         type: string
-      firstName:
+      firstname:
         type: string
       id:
         format: int64
         type: integer
-      secondName:
+      secondname:
         type: string
 swagger: "2.0"
