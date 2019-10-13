@@ -4,12 +4,12 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"log"
-	"net/http"
-	"time"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
+	"log"
+	"net/http"
+	"time"
 )
 
 // StudentID represents a ...
@@ -35,8 +35,8 @@ type CourseID struct {
 // Student represents a ...
 // swagger:response StudentResponse
 type Student struct {
-    // in: path
-    // required: true
+	// in: path
+	// required: true
 	ID        string `json:"id"`
 	Firstname string `json:"firstname"`
 	Lastname  string `json:"lastname"`
@@ -112,12 +112,11 @@ func getCourse(w http.ResponseWriter, r *http.Request) {
 }
 
 func createStudent(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "application/json")
-    s := Student{}
-    _ = json.NewDecoder(r.Body).Decode(&s)
-    fmt.Println(s)
+	w.Header().Set("Content-Type", "application/json")
+	s := Student{}
+	_ = json.NewDecoder(r.Body).Decode(&s)
 	fmt.Println(json.NewEncoder(w).Encode(s))
-	
+
 	conn := NewDbConn()
 
 	connStr := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable", conn.DbHost, conn.DbUsername, conn.DbPassword, conn.DbName)
