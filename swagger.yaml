@@ -1,0 +1,40 @@
+info: {}
+paths:
+  /api/v2/courses:
+    get:
+      operationId: idOfCoursesEndpoint
+      responses:
+        "200":
+          $ref: '#/responses/CourseResponse'
+      tags:
+      - students-tag
+  /api/v2/students:
+    get:
+      operationId: idOfStudentsEndpoint
+      responses:
+        "200":
+          $ref: '#/responses/StudentResponse'
+      tags:
+      - students-tag
+responses:
+  CourseResponse:
+    description: Course represents a ...
+    headers:
+      id:
+        format: int64
+        type: integer
+      title:
+        type: string
+  StudentResponse:
+    description: Student represents a ...
+    headers:
+      email:
+        type: string
+      firstName:
+        type: string
+      id:
+        format: int64
+        type: integer
+      secondName:
+        type: string
+swagger: "2.0"

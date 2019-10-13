@@ -9,7 +9,12 @@ import (
 	"net/http"
 )
 
+// swagger:route GET /api/v2/students students-tag idOfStudentsEndpoint
+// responses:
+//   200: StudentResponse
+
 // Student represents a ...
+// swagger:response StudentResponse
 type Student struct {
 	ID         int    `json:"id"`
 	FirstName  string `json:"firstName"`
@@ -17,7 +22,12 @@ type Student struct {
 	Email      string `json:"email"`
 }
 
+// swagger:route GET /api/v2/courses students-tag idOfCoursesEndpoint
+// responses:
+//   200: CourseResponse
+
 // Course represents a ...
+// swagger:response CourseResponse
 type Course struct {
 	ID    int    `json:"id"`
 	Title string `json:"title"`
@@ -29,8 +39,9 @@ func HomeRouterHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%v GET '%s'\n", http.StatusOK, r.URL.Path)
 }
 
-// APIRouterHandler represents a ...
-func APIRouterHandler(w http.ResponseWriter, r *http.Request) {
+// APIRouterHealthHandler represents a ...
+// swagger:response APIRouterHealthResponse
+func APIRouterHealthHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "ok")
 }
 
@@ -114,9 +125,9 @@ func getCourses() []byte {
 
 func main() {
 	http.HandleFunc("/", HomeRouterHandler)
-	http.HandleFunc("/api/healthz", APIRouterHandler)
-	http.HandleFunc("/api/students", StudentsRouterHandler)
-	http.HandleFunc("/api/courses", CoursesRouterHandler)
+	http.HandleFunc("/api/v2/healthz", APIRouterHealthHandler)
+	http.HandleFunc("/api/v2/students", StudentsRouterHandler)
+	http.HandleFunc("/api/v2/courses", CoursesRouterHandler)
 	err := http.ListenAndServe(":80", nil)
 
 	if err != nil {
