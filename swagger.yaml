@@ -1,7 +1,22 @@
 paths:
   /api/v2/courses:
     get:
-      operationId: idOfCoursesEndpoint
+      operationId: getCourses
+      responses:
+        "200":
+          $ref: '#/responses/CourseResponse'
+      tags:
+      - courses
+  /api/v2/courses/{id}:
+    get:
+      operationId: getCourse
+      parameters:
+      - description: The ID of the course
+        in: path
+        name: id
+        required: true
+        type: string
+        x-go-name: ID
       responses:
         "200":
           $ref: '#/responses/CourseResponse'
@@ -9,7 +24,22 @@ paths:
       - courses
   /api/v2/students:
     get:
-      operationId: idOfStudentsEndpoint
+      operationId: getStudents
+      responses:
+        "200":
+          $ref: '#/responses/StudentResponse'
+      tags:
+      - students
+  /api/v2/students/{id}:
+    get:
+      operationId: getStudent
+      parameters:
+      - description: The ID of the student
+        in: path
+        name: id
+        required: true
+        type: string
+        x-go-name: ID
       responses:
         "200":
           $ref: '#/responses/StudentResponse'
@@ -20,8 +50,7 @@ responses:
     description: Course represents a ...
     headers:
       id:
-        format: int64
-        type: integer
+        type: string
       title:
         type: string
   StudentResponse:
@@ -32,8 +61,10 @@ responses:
       firstname:
         type: string
       id:
-        format: int64
-        type: integer
-      secondname:
+        description: |-
+          in: path
+          required: true
+        type: string
+      lastname:
         type: string
 swagger: "2.0"

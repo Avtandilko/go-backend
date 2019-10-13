@@ -3,9 +3,27 @@ version: '3.1'
 services:
   db:
     image: postgres:12.0
+    restart: always
     ports:
       - "5432:5432"
-    restart: always
+    networks:
+      - backend
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: playground
+  backend:
+    build:
+      context: ./
+      dockerfile: docker/backend.dockerfile
+    restart: always
+    ports:
+      - "80:80"
+    networks:
+      - backend
+    environment:
+      DB_HOST: db
+      DB_NAME: playground
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+networks:
+  backend:
